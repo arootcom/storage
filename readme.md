@@ -17,13 +17,20 @@
 
     $ docker exec -it kafka kafka-topics --list --bootstrap-server kafka:9092
 
+### Delete topic
+
+    $ docker exec -it kafka kafka-topics --bootstrap-server kafka:9092 --delete -topic signatures
+    $ docker exec -it kafka kafka-topics --bootstrap-server kafka:9092 --delete -topic documents
+
 ## Subscribing to events
 
-    $ docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic notifications
+    $ docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic signatures
+    $ docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic documents
 
 or 
     
-    $ kafkacat -C -b localhost:9092 -t notifications
+    $ kafkacat -C -b localhost:9092 -t signatures
+    $ kafkacat -C -b localhost:9092 -t documents
 
 # Uploading documents
 

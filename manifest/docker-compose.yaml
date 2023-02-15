@@ -23,9 +23,12 @@ services:
     depends_on:
       - kafka
     environment:
-      MINIO_NOTIFY_KAFKA_ENABLE: 'on'
-      MINIO_NOTIFY_KAFKA_BROKERS: "kafka:29092"
-      MINIO_NOTIFY_KAFKA_TOPIC:  'notifications'
+      MINIO_NOTIFY_KAFKA_ENABLE_DOCUMENTS: 'on'
+      MINIO_NOTIFY_KAFKA_BROKERS_DOCUMENTS: "kafka:29092"
+      MINIO_NOTIFY_KAFKA_TOPIC_DOCUMENTS:  'documents'
+      MINIO_NOTIFY_KAFKA_ENABLE_SIGNATURES: 'on'
+      MINIO_NOTIFY_KAFKA_BROKERS_SIGNATURES: "kafka:29092"
+      MINIO_NOTIFY_KAFKA_TOPIC_SIGNATURES:  'signatures'
       MINIO_NOTIFY_WEBHOOK_QUEUE_DIR: /home/events
 
   archive:

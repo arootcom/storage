@@ -20,6 +20,8 @@ func main() {
     log.Debug("minio", "client:", fmt.Sprintf("%+v", client))
 
     ctx := context.Background()
+    arndoc := notification.NewArn("minio", "sqs", "", "DOCUMENTS", "kafka")
+    arnsig := notification.NewArn("minio", "sqs", "", "SIGNATURES", "kafka")
 
     for {
         date := time.Now() 
@@ -38,17 +40,21 @@ func main() {
             }
             log.Debug("create", "bucket:", bname)
 
-            arn := notification.NewArn("minio", "sqs", "", "_", "kafka")
-            queue := notification.NewConfig(arn)
-            queue.AddEvents(notification.ObjectCreatedAll)
-            queue.AddFilterSuffix(".sig")
+            queuedoc := notification.NewConfig(arndoc)
+            queuedoc.AddEvents(notification.ObjectCreatedAll)
+            queuedoc.AddFilterSuffix(".xml")
+
+            queuesig := notification.NewConfig(arnsig)
+            queuesig.AddEvents(notification.ObjectCreatedAll)
+            queuesig.AddFilterSuffix(".sig")
 
             config := notification.Configuration{}
-            config.AddQueue(queue)
+            config.AddQueue(queuesig)
+            config.AddQueue(queuedoc)
 
             err = client.SetBucketNotification(ctx, bname, config)
             if err != nil {
-                log.Error("error", "notification:", bname, ", error:", err)
+                log.Error("error", "notification signature:", bname, ", error:", err)
                 continue
             }
         }
