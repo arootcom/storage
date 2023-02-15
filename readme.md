@@ -38,3 +38,10 @@ Downloads two files with xml and sig extensions every 5 seconds. The file name i
     $ cd ./go
     $ export STORAGE_LOG_LEVEL=Debug; go run ./deleting.go 
 
+
+# References
+
+ * [Multi-Cloud Object Storage](https://min.io/)
+ * [MinIO Go Client API](https://min.io/docs/minio/linux/developers/go/API.html)
+ * [kafka-go](https://github.com/segmentio/kafka-go)
+

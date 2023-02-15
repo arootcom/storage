@@ -6,6 +6,7 @@ require (
 	github.com/go-kit/kit v0.12.0
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/satori/go.uuid v1.2.0
+	github.com/segmentio/kafka-go v0.4.38
 )
 
 require (
@@ -20,6 +21,7 @@ require (
 	github.com/minio/sha256-simd v1.0.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/rs/xid v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect

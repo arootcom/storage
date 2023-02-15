@@ -28,6 +28,17 @@ services:
       MINIO_NOTIFY_KAFKA_TOPIC:  'notifications'
       MINIO_NOTIFY_WEBHOOK_QUEUE_DIR: /home/events
 
+  archive:
+    image: minio/minio
+    container_name: archive
+    command: server /data --console-address ":9010"
+    ports:
+      - "9010:9010"
+      - "9011:9011"
+    restart: always
+    networks:
+      - kafka-net
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.0
     container_name: zookeeper
