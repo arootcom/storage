@@ -1,7 +1,6 @@
 package main
 
 import (
-    "os"
     "fmt"
     "time"
     "context"
@@ -61,13 +60,7 @@ func main() {
 
         id := uuid.NewV4()
     
-        err = upload("../document.xml", bname, fmt.Sprintf("%s.xml", id), "text/xml")
-        if err != nil {
-            log.Error("error", "upload", err)
-            continue
-        }
-        
-        err = upload("../document.sig", bname, fmt.Sprintf("%s.sig", id), "application/octet-stream")
+        err = minio.Upload("../document.xml", bname, fmt.Sprintf("%s.xml", id), "text/xml")
         if err != nil {
             log.Error("error", "upload", err)
             continue
@@ -79,36 +72,3 @@ func main() {
     log.Info("stop", "Loading")
 }
 
-func upload (filename string, bucket string, key string, contentType string) error {
-    reader, err := os.Open(filename)
-    defer reader.Close()
-    if err != nil {
-        return err
-    }
-    log.Debug("upload", "open", filename)
-
-    stat, err := reader.Stat()
-    if err != nil {
-        return err
-    }
-    log.Debug("upload", "size", stat.Size())
-
-    client := minio.GetInstance()
-    ctx := context.Background()
-
-    object, err := client.PutObject(ctx, bucket, key, reader, stat.Size(),
-        opt.PutObjectOptions{
-            ContentType: contentType,
-        },
-    )
-    if err != nil {
-        return err
-    }
-    log.Debug("upload", "object:", object)
-    
-    log.Debug("upload", 
-        "from", filename, "size", stat.Size(), 
-        "to", fmt.Sprintf("/%s/%s", bucket, key), "content/type", contentType,
-    )
-    return nil
-}

@@ -10,13 +10,13 @@ import (
 )
 
 func main() {
-    log.Info("start", "Listening")
+    log.Info("start", "Archiving")
 
     ctx := context.Background()
     reader := kafka.NewReader(kafka.ReaderConfig{
         Brokers:   []string{"localhost:9092"},
-        GroupID:   "toarchive",
-        Topic:     "notifications",
+        GroupID:   "archiving",
+        Topic:     "signatures",
         MinBytes:  10e3, // 10KB
         MaxBytes:  10e6, // 10MB
     })
@@ -35,6 +35,6 @@ func main() {
         )
     }
 
-    log.Info("stop", "Listening")
+    log.Info("stop", "Archiving")
 }
 

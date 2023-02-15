@@ -38,7 +38,14 @@ or
     $ export STORAGE_LOG_LEVEL=Debug; go run ./loading.go
 
 Creates a bucket every minute. The format of the bucket name is YYYYMMDDHHMM.
-Downloads two files with xml and sig extensions every 5 seconds. The file name in uuid format.
+Uploads the {uuid}.xml file every 5 seconds
+
+# Signing uploaded documents
+
+    $ cd ./go
+    $ export STORAGE_LOG_LEVEL=Debug; go run ./signing.go
+
+Downloads signature files. File format {uuid}.sig
 
 # Deleting documents
 
