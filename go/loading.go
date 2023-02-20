@@ -7,6 +7,7 @@ import (
     "github.com/satori/go.uuid"
     opt "github.com/minio/minio-go/v7"
     "github.com/minio/minio-go/v7/pkg/notification"
+    "github.com/minio/minio-go/v7/pkg/tags"
 
     "storage/instance/log"
     "storage/instance/minio"
@@ -40,11 +41,11 @@ func main() {
             log.Debug("create", "bucket:", bname)
 
             queuedoc := notification.NewConfig(arndoc)
-            queuedoc.AddEvents(notification.ObjectCreatedAll)
+            queuedoc.AddEvents(notification.ObjectCreatedPut)
             queuedoc.AddFilterSuffix(".xml")
 
             queuesig := notification.NewConfig(arnsig)
-            queuesig.AddEvents(notification.ObjectCreatedAll)
+            queuesig.AddEvents(notification.ObjectCreatedPut)
             queuesig.AddFilterSuffix(".sig")
 
             config := notification.Configuration{}
@@ -59,13 +60,29 @@ func main() {
         }
 
         id := uuid.NewV4()
+        file_name := fmt.Sprintf("%s.xml", id)
 
         meta := make(map[string]string)
         meta["Type"] = "DOCUMENT"
 
-        err = minio.Upload("../document.xml", bname, fmt.Sprintf("%s.xml", id), "text/xml", meta)
+        err = minio.Upload("../document.xml", bname, file_name, "text/xml", meta)
         if err != nil {
             log.Error("error", "upload", err)
+            continue
+        }
+
+        data_tags := make(map[string]string)
+        data_tags["Status"] = "UPLOADED"
+
+        obj_tags, err := tags.NewTags(data_tags, true)
+        if err != nil {
+            log.Error("error", "tags", err)
+            continue
+        }
+
+        err = client.PutObjectTagging(ctx, bname, file_name, obj_tags, opt.PutObjectTaggingOptions{})
+        if err != nil {
+            log.Error("error", "tags", err)
             continue
         }
 

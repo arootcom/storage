@@ -7,6 +7,8 @@ import (
     "context"
     "encoding/json"
     "github.com/segmentio/kafka-go"
+    opt "github.com/minio/minio-go/v7"
+    "github.com/minio/minio-go/v7/pkg/tags"
 
     "storage/instance/log"
     "storage/instance/minio"
@@ -19,6 +21,9 @@ type Message struct {
 
 func main() {
     log.Info("start", "Signing")
+
+    client := minio.GetInstance()
+    log.Debug("minio", "client:", fmt.Sprintf("%+v", client))
 
     ctx := context.Background()
     reader := kafka.NewReader(kafka.ReaderConfig{
@@ -60,6 +65,21 @@ func main() {
         err = minio.Upload("../document.sig", bucket, fmt.Sprintf("%s.sig", uuid), "application/octet-stream", meta)
         if err != nil {
             log.Error("error", "upload", err)
+            continue
+        }
+
+        data_tags := make(map[string]string)
+        data_tags["Status"] = "SIGNED"
+
+        obj_tags, err := tags.NewTags(data_tags, true)
+        if err != nil {
+            log.Error("error", "tags", err)
+            continue
+        }
+
+        err = client.PutObjectTagging(ctx, bucket, fmt.Sprintf("%s.xml", uuid), obj_tags, opt.PutObjectTaggingOptions{})
+        if err != nil {
+            log.Error("error", "tags", err)
             continue
         }
     }
