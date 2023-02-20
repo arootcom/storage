@@ -30,7 +30,7 @@ func GetInstance() *minio.Client {
 }
 
 //
-func Upload (filename string, bucket string, key string, contentType string) error {
+func Upload (filename string, bucket string, key string, contentType string, meta map[string]string) error {
     reader, err := os.Open(filename)
     defer reader.Close()
     if err != nil {
@@ -48,6 +48,7 @@ func Upload (filename string, bucket string, key string, contentType string) err
     object, err := client.PutObject(ctx, bucket, key, reader, stat.Size(),
         minio.PutObjectOptions{
             ContentType: contentType,
+            UserMetadata: meta,
         },
     )
     if err != nil {

@@ -54,7 +54,10 @@ func main() {
 
         log.Info("event", "bucket:", bucket, "uuid:", uuid)
 
-        err = minio.Upload("../document.sig", bucket, fmt.Sprintf("%s.sig", uuid), "application/octet-stream")
+        meta := make(map[string]string)
+        meta["Type"] = "SIGNATURE"
+
+        err = minio.Upload("../document.sig", bucket, fmt.Sprintf("%s.sig", uuid), "application/octet-stream", meta)
         if err != nil {
             log.Error("error", "upload", err)
             continue

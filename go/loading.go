@@ -59,8 +59,11 @@ func main() {
         }
 
         id := uuid.NewV4()
-    
-        err = minio.Upload("../document.xml", bname, fmt.Sprintf("%s.xml", id), "text/xml")
+
+        meta := make(map[string]string)
+        meta["Type"] = "DOCUMENT"
+
+        err = minio.Upload("../document.xml", bname, fmt.Sprintf("%s.xml", id), "text/xml", meta)
         if err != nil {
             log.Error("error", "upload", err)
             continue
