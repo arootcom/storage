@@ -17,7 +17,6 @@ func main() {
     log.Info("start", "Loading")
 
     client := minio.GetInstance()
-    log.Debug("minio", "client:", fmt.Sprintf("%+v", client))
 
     ctx := context.Background()
     arndoc := notification.NewArn("minio", "sqs", "", "DOCUMENTS", "kafka")

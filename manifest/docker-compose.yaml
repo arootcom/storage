@@ -34,10 +34,10 @@ services:
   archive:
     image: minio/minio
     container_name: archive
-    command: server /data --console-address ":9010"
+    command: server /data --console-address ":9001"
     ports:
-      - "9010:9010"
-      - "9011:9011"
+      - "9010:9000"
+      - "9011:9001"
     restart: always
     networks:
       - kafka-net

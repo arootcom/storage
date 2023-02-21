@@ -25,6 +25,7 @@ func GetInstance() *minio.Client {
         if err != nil {
             panic(err)
         }
+        log.Debug("minio", "instance:", fmt.Sprintf("%+v", instance))
     })
     return instance
 }

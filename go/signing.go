@@ -23,7 +23,6 @@ func main() {
     log.Info("start", "Signing")
 
     client := minio.GetInstance()
-    log.Debug("minio", "client:", fmt.Sprintf("%+v", client))
 
     ctx := context.Background()
     reader := kafka.NewReader(kafka.ReaderConfig{
