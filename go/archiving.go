@@ -23,7 +23,7 @@ func main() {
     log.Info("start", "Archiving")
 
     client := minio.GetInstance()
-    archive := archive.GetInstance()
+    arc := archive.GetInstance()
 
     ctx := context.Background()
     reader := kafka.NewReader(kafka.ReaderConfig{
@@ -59,18 +59,18 @@ func main() {
 
         log.Info("event", "bucket:", bucket, "uuid:", uuid)
 
-        is_exists, err := archive.BucketExists(ctx, bucket)
+        is_exists, err := arc.BucketExists(ctx, bucket)
         if err != nil {
             log.Error("error", "exists bucket: ", bucket, ", error:", err)
             continue
         } else if !is_exists {
-            err = archive.MakeBucket(ctx, bucket, opt.MakeBucketOptions{})
+            err = arc.MakeBucket(ctx, bucket, opt.MakeBucketOptions{})
             if err != nil {
                 log.Error("error", "create bucket:", bucket, ", error:", err)
                 continue
             }
 
-            err = archive.EnableVersioning(ctx, bucket)
+            err = arc.EnableVersioning(ctx, bucket)
             if err != nil {
                 log.Error("error", "versioning bucket:", bucket, ", error:", err)
                 continue
@@ -103,7 +103,7 @@ func main() {
             }
             defer reader.Close()
 
-            object, err := archive.PutObject(ctx, bucket, file_name, reader, stat.Size,
+            object, err := arc.PutObject(ctx, bucket, file_name, reader, stat.Size,
                 opt.PutObjectOptions{
                     ContentType: stat.ContentType,
                     UserMetadata: stat.UserMetadata,
@@ -115,7 +115,7 @@ func main() {
             }
             log.Debug("archiving", "object:", fmt.Sprintf("%+v", object))
 
-            err = archive.PutObjectTagging(ctx, bucket, file_name, tags, opt.PutObjectTaggingOptions{})
+            err = arc.PutObjectTagging(ctx, bucket, file_name, tags, opt.PutObjectTaggingOptions{})
             if err != nil {
                 log.Error("error", "tags", err)
                 continue

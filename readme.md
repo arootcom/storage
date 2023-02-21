@@ -7,7 +7,7 @@
 
 # MINIO
 
-    Open in a browser 
+    Open in a browser
     http://localhost:9001/
     Using credentials: minioadmin/minioadmin.
 
@@ -27,8 +27,8 @@
     $ docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic signatures
     $ docker exec -it kafka kafka-console-consumer --bootstrap-server kafka:9092 --topic documents
 
-or 
-    
+or
+
     $ kafkacat -C -b localhost:9092 -t signatures
     $ kafkacat -C -b localhost:9092 -t documents
 
@@ -47,11 +47,15 @@ Uploads the {uuid}.xml file every 5 seconds
 
 Downloads signature files. File format {uuid}.sig
 
+# Archiving uploaded documents
+
+    $ cd ./go
+    $ export STORAGE_LOG_LEVEL=Debug; go run ./archiving.go
+
 # Deleting documents
 
     $ cd ./go
-    $ export STORAGE_LOG_LEVEL=Debug; go run ./deleting.go 
-
+    $ export STORAGE_LOG_LEVEL=Debug; go run ./deleting.go
 
 # References
 
